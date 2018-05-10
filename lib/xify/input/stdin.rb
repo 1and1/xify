@@ -1,4 +1,9 @@
+require 'xify/item'
+
 class Stdin
+  def initialize(config)
+  end
+
   def updates
     loop do
       begin
@@ -10,7 +15,9 @@ class Stdin
           break
         end
 
-        yield [ input ] if input.length != 1
+        if input.length != 1
+          yield Item.new link: 'http://localhost', message: input, source: 'stdin'
+        end
       rescue Interrupt
         # Stop on CTRL+C
         puts

@@ -1,7 +1,10 @@
+require 'time'
+
 class Stdout
-  def process(items)
-    items.each do |i|
-      puts "[#{Time.now.strftime('%FT%T')}] #{i}"
-    end
+  def initialize(config)
+  end
+
+  def process(item)
+    puts "[#{item.time}] #{item.message}"
   end
 end
