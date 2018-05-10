@@ -4,10 +4,6 @@ require 'time'
 
 class RocketChat
   def initialize(config)
-    working_dir = "#{ENV['HOME']}/.xify/RocketChat"
-    Dir.mkdir working_dir rescue Errno::EEXIST
-    @auth_file = "#{working_dir}/auth_data.json"
-
     @channel = config['channel']
     uri = URI.parse config['uri']
     @http = Net::HTTP.new uri.host, uri.port
@@ -15,6 +11,10 @@ class RocketChat
 
     @user = config['user']
     @pass = config['pass']
+
+    working_dir = "#{ENV['HOME']}/.xify/RocketChat"
+    Dir.mkdir working_dir rescue Errno::EEXIST
+    @auth_file = "#{working_dir}/#{@user}.json"
   end
 
   def login
