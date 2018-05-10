@@ -6,6 +6,6 @@ Gem::Specification.new do |s|
   s.description = 'Cross-post content from one service to another.'
   s.author      = 'Finn Glöe'
   s.email       = 'fgloee@united-internet.de'
-  s.files       = ['lib/xify.rb']
-  s.exacutables << 'xify'
+  s.files       = Dir['lib/**/*.rb']
+  s.executables << 'xify'
 end
