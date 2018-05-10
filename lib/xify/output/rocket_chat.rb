@@ -4,15 +4,25 @@ require 'time'
 
 class RocketChat
   def initialize(config)
+    working_dir = "#{ENV['HOME']}/.xify/RocketChat"
+    Dir.mkdir working_dir rescue Errno::EEXIST
+    @auth_file = "#{working_dir}/auth_data.json"
+
     @channel = config['channel']
     uri = URI.parse config['uri']
     @http = Net::HTTP.new uri.host, uri.port
     @http.use_ssl = true
+
     @user = config['user']
     @pass = config['pass']
   end
 
   def login
+    if File.exists? @auth_file
+      @auth_data = JSON.parse File.read @auth_file
+      return
+    end
+
     req = Net::HTTP::Post.new '/api/v1/login',
       'Content-Type' => 'application/json'
     req.body = {
@@ -24,18 +34,22 @@ class RocketChat
 
     raise "Error: #{res.code} #{res.message}\n#{res.body}" unless res.is_a? Net::HTTPSuccess
 
-    data = JSON.parse(res.body)['data']
-    @user_id = data['userId']
-    @auth_token = data['authToken']
+    @auth_data = JSON.parse(res.body)['data']
+    File.write @auth_file, @auth_data.to_json
+  end
+
+  def reset_auth
+    @auth_data = nil
+    File.delete @auth_file
   end
 
   def authenticated_request
-    login if @user_id.nil? || @auth_token.nil?
+    login unless @auth_data
 
     req = Net::HTTP::Post.new '/api/v1/chat.postMessage',
       'Content-Type' => 'application/json',
-      'X-User-Id' => @user_id,
-      'X-Auth-Token' => @auth_token
+      'X-User-Id' => @auth_data['userId'],
+      'X-Auth-Token' => @auth_data['authToken']
 
     yield req
 
@@ -62,7 +76,7 @@ class RocketChat
 
     case res
     when Net::HTTPUnauthorized
-      @user_id = @auth_token = nil
+      reset_auth
       process(item)
     when Net::HTTPSuccess
       # nothing

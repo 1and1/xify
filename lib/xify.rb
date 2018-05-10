@@ -6,7 +6,10 @@ require 'xify/output/rocket_chat'
 
 class Xify
   def self.run(args)
-    config_file = args.shift || "#{ENV['HOME']}/.xify"
+    working_dir = "#{ENV['HOME']}/.xify"
+    Dir.mkdir working_dir rescue Errno::EEXIST
+
+    config_file = args.shift || "#{working_dir}/config.yml"
     puts "Loading config from #{config_file}"
     config = YAML::load_file config_file
 
