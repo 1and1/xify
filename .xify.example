@@ -1,0 +1,12 @@
+inputs:
+  - class: Stdin
+    enabled: true
+outputs:
+  - class: Stdout
+    enabled: true
+  - class: RocketChat
+    enabled: false
+    channel: '#general'
+    uri: https://open.rocket.chat
+    user: 'rc_user'
+    pass: 'Pa55w0rd'

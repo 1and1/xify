@@ -5,10 +5,10 @@ require 'xify/output/stdout'
 require 'xify/output/rocket_chat'
 
 class Xify
-  def self.run
-    puts 'Loading config'
-
-    config = YAML::load_file "#{ENV['HOME']}/.xify"
+  def self.run(args)
+    config_file = args.shift || "#{ENV['HOME']}/.xify"
+    puts "Loading config from #{config_file}"
+    config = YAML::load_file config_file
 
     config.keys.each do |c|
       config[c].map! do |handler|
