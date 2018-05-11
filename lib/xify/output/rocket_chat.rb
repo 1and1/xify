@@ -56,19 +56,16 @@ class RocketChat
     req
   end
 
-  def process(item)
+  def process(event)
     res = @http.request(authenticated_request do |req|
       req.body = {
         channel: @channel,
-        alias: item.author,
+        alias: event.author,
         attachments: [
           {
-            author_name: item.source,
-            ts: item.time,
-            message_link: item.link,
-            title: item.parent,
-            title_link: item.parent_link,
-            text: item.message
+            title: event.args[:parent],
+            title_link: event.args[:parent_link],
+            text: event.args[:link] ? "#{event.message.chomp} ([more](#{event.args[:link]}))" : event.message.chomp
           }
         ]
       }.to_json
@@ -77,7 +74,7 @@ class RocketChat
     case res
     when Net::HTTPUnauthorized
       reset_auth
-      process(item)
+      process event
     when Net::HTTPSuccess
       # nothing
     else

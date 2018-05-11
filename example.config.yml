@@ -1,6 +1,7 @@
 inputs:
   - class: Stdin
     enabled: true
+    author: Console
 outputs:
   - class: Stdout
     enabled: true

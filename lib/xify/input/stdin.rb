@@ -1,7 +1,8 @@
-require 'xify/item'
+require 'xify/event'
 
 class Stdin
   def initialize(config)
+    @author = config['author']
   end
 
   def updates
@@ -16,7 +17,7 @@ class Stdin
         end
 
         if input.length != 1
-          yield Item.new link: 'http://localhost', message: input, source: 'stdin'
+          yield Event.new @author, input
         end
       rescue Interrupt
         # Stop on CTRL+C

@@ -4,7 +4,7 @@ class Stdout
   def initialize(config)
   end
 
-  def process(item)
-    puts "[#{item.time}] #{item.message}"
+  def process(event)
+    puts "[#{event.args[:time] || Time.now.iso8601}] #{event.author}: #{event.message}"
   end
 end
