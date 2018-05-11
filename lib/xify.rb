@@ -17,7 +17,7 @@ class Xify
       config[c].map! do |handler|
         next unless handler['enabled']
         Object.const_get(handler['class']).new(handler)
-      end
+      end.compact!
     end
 
     puts 'Looking for updates'
