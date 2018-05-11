@@ -5,6 +5,6 @@ class Stdout
   end
 
   def process(event)
-    puts "[#{event.args[:time] || Time.now.iso8601}] #{event.author}: #{event.message}"
+    puts "[#{event.args[:time] || Time.now.iso8601}] #{event.author}:\n#{event.message}"
   end
 end

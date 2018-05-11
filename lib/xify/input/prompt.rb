@@ -1,6 +1,6 @@
 require 'xify/event'
 
-class Stdin
+class Prompt
   def initialize(config)
     @author = config['author']
   end
@@ -17,7 +17,7 @@ class Stdin
         end
 
         if input.length != 1
-          yield Event.new @author, input
+          yield Event.new @author, input.chomp
         end
       rescue Interrupt
         # Stop on CTRL+C

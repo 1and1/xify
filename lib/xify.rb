@@ -1,6 +1,8 @@
 require 'yaml'
 
-require 'xify/input/stdin'
+require 'xify/input/pipe'
+require 'xify/input/prompt'
+require 'xify/input/shell'
 require 'xify/output/stdout'
 require 'xify/output/rocket_chat'
 
@@ -9,7 +11,12 @@ class Xify
     working_dir = "#{ENV['HOME']}/.xify"
     Dir.mkdir working_dir rescue Errno::EEXIST
 
-    config_file = args.shift || "#{working_dir}/config.yml"
+    config_file = "#{working_dir}/config.yml"
+    if args.first == '-c'
+      args.shift
+      config_file = args.shift
+    end
+
     puts "Loading config from #{config_file}"
     config = YAML::load_file config_file
 
@@ -20,7 +27,6 @@ class Xify
       end.compact!
     end
 
-    puts 'Looking for updates'
     config['inputs'].each do |i|
       i.updates do |u|
         config['outputs'].each do |o|

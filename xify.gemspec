@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'xify'
-  s.version     = '0.0.2'
+  s.version     = '0.1.0'
   s.date        = '2018-05-11'
   s.summary     = 'Cross-post content from one service to another.'
   s.description = 'Cross-post content from one service to another.'

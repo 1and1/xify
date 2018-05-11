@@ -1,7 +1,14 @@
 inputs:
-  - class: Stdin
+  - class: Pipe
+    enabled: false
+    author: Pipe
+  - class: Prompt
     enabled: true
-    author: Console
+    author: Prompt
+  - class: Shell
+    enabled: true
+    author: Shell
+    shell: echo 'Hello, world!'
 outputs:
   - class: Stdout
     enabled: true
