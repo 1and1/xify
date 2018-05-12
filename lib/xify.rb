@@ -2,6 +2,7 @@ require 'yaml'
 
 require 'xify/input/pipe'
 require 'xify/input/prompt'
+require 'xify/input/rocket_chat'
 require 'xify/input/shell'
 require 'xify/output/stdout'
 require 'xify/output/rocket_chat'
