@@ -20,10 +20,11 @@ class Xify
     puts "Loading config from #{config_file}"
     config = YAML::load_file config_file
 
-    config.keys.each do |c|
-      config[c].map! do |handler|
+    config.keys.each do |section|
+      ns = section[0...-1].capitalize
+      config[section].map! do |handler|
         next unless handler['enabled']
-        Object.const_get(handler['class']).new(handler)
+        Object.const_get("#{ns}::#{handler['class']}").new handler
       end.compact!
     end
 
