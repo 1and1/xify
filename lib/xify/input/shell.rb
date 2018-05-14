@@ -10,9 +10,11 @@ module Input
     end
 
     def updates(&block)
-      return run(&block) unless @config['schedule']
+      return run(&block) unless @config['trigger']
 
-      Rufus::Scheduler.singleton.repeat @config['schedule'] do
+      opts = {}
+      opts[:first] = :now if @config['trigger']['now']
+      Rufus::Scheduler.singleton.repeat @config['trigger']['schedule'], opts do
         run(&block)
       end
     end
