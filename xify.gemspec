@@ -1,7 +1,9 @@
+require 'date'
+
 Gem::Specification.new do |s|
   s.name        = 'xify'
-  s.version     = '0.2.0'
-  s.date        = '2018-05-11'
+  s.version     = '0.3.0'
+  s.date        = Date.today.to_s
   s.summary     = 'Cross-post content from one service to another.'
   s.description = 'Cross-post content from one service to another.'
   s.author      = 'Finn Glöe'
@@ -9,6 +11,6 @@ Gem::Specification.new do |s|
   s.files       = Dir['lib/**/*.rb']
   s.executables << 'xify'
 
-  s.add_runtime_dependency 'metybur'
-  s.add_runtime_dependency 'rufus-scheduler'
+  s.add_runtime_dependency 'metybur', '~> 0.4.3'
+  s.add_runtime_dependency 'rufus-scheduler', '~> 3.4'
 end
