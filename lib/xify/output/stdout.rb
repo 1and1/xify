@@ -6,7 +6,7 @@ module Output
     end
 
     def process(event)
-      puts "[#{event.args[:time].iso8601 || Time.now.iso8601}] #{event.author}:\n#{event.message}"
+      puts "[#{(event.args[:time] || Time.now).iso8601}] #{event.author}:\n#{event.message}"
     end
   end
 end
