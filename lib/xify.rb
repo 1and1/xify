@@ -42,22 +42,36 @@ class Xify
       end.compact!
     end
 
-    config['inputs'].each do |i|
-      i.updates do |u|
-        config['outputs'].each do |o|
-          begin
-            o.process u
-          rescue => e
-            $stderr.puts e.message
+    begin
+      config['inputs'].each do |i|
+        begin
+          i.updates do |u|
+            config['outputs'].each do |o|
+              begin
+                o.process u
+              rescue => e
+                error e
+              end
+            end
           end
+        rescue => e
+          error e
         end
       end
-    end
 
-    Rufus::Scheduler.singleton.join
+      Rufus::Scheduler.singleton.join
+    rescue Interrupt => e
+      $stderr.puts "\nExiting."
+    end
   end
 
   def self.debug(str)
     puts str if @verbose
+  end
+
+  def self.error(e)
+    return $stderr.puts e.message unless @verbose
+
+    $stderr.puts "#{e.backtrace.first}: #{e.message} (#{e.class})", e.backtrace.drop(1).map{|s| "\t#{s}"}
   end
 end

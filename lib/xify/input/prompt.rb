@@ -12,18 +12,14 @@ module Input
           input = prompt
 
           unless input
-            # Stop on CTRL+D
-            puts
-            break
+            raise Interrupt
           end
 
           if input.length != 1
             yield Event.new @author, input.chomp
           end
         rescue Interrupt
-          # Stop on CTRL+C
-          puts
-          break
+          raise
         end
       end
     end

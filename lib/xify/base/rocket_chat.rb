@@ -34,7 +34,8 @@ module Base
       when Net::HTTPSuccess
         # nothing
       else
-        raise "Error on #{method.upcase} #{@config['uri']}#{path}: #{res.code} #{res.message}\n#{res.body}"
+        $stderr.puts res.body
+        raise "Error on #{method.upcase} #{@config['uri']}#{path}: #{res.code} #{res.message}"
       end
 
       res
@@ -57,7 +58,10 @@ module Base
 
       res = @http.request req
 
-      raise "Error while authenticating to #{@config['uri']}: #{res.code} #{res.message}\n#{res.body}" unless res.is_a? Net::HTTPSuccess
+      unless res.is_a? Net::HTTPSuccess
+        $stderr.puts res.body
+        raise "Error while authenticating to #{@config['uri']}: #{res.code} #{res.message}"
+      end
 
       @auth_data = JSON.parse(res.body)['data']
       File.write @auth_file, @auth_data.to_json
