@@ -10,4 +10,5 @@ Gem::Specification.new do |s|
   s.executables << 'xify'
 
   s.add_runtime_dependency 'metybur'
+  s.add_runtime_dependency 'rufus-scheduler'
 end

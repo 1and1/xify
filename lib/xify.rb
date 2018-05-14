@@ -1,3 +1,4 @@
+require 'rufus-scheduler'
 require 'yaml'
 
 require 'xify/input/pipe'
@@ -40,5 +41,7 @@ class Xify
         end
       end
     end
+
+    Rufus::Scheduler.singleton.join
   end
 end
