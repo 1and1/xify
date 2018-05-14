@@ -9,24 +9,36 @@ require 'xify/output/stdout'
 require 'xify/output/rocket_chat'
 
 class Xify
-  def self.run(args)
+  @verbose = false
+
+  def self.run
     working_dir = "#{ENV['HOME']}/.xify"
     Dir.mkdir working_dir rescue Errno::EEXIST
-
     config_file = "#{working_dir}/config.yml"
-    if args.first == '-c'
-      args.shift
-      config_file = args.shift
+    files = []
+
+    while arg = ARGV.shift do
+      case arg
+      when '-c', '--config'
+        config_file = ARGV.shift
+      when '-v', '--verbose'
+        @verbose = true
+      else
+        files << arg
+      end
     end
 
-    puts "Loading config from #{config_file}"
+    ARGV.unshift(*files)
+
+    debug "Loading config from #{config_file}"
     config = YAML::load_file config_file
 
     config.keys.each do |section|
-      ns = section[0...-1].capitalize
+      type = section[0...-1]
       config[section].map! do |handler|
         next unless handler['enabled']
-        Object.const_get("#{ns}::#{handler['class']}").new handler
+        debug "Setting up #{handler['class']} as #{type}"
+        Object.const_get("#{type.capitalize}::#{handler['class']}").new handler
       end.compact!
     end
 
@@ -43,5 +55,9 @@ class Xify
     end
 
     Rufus::Scheduler.singleton.join
+  end
+
+  def self.debug(str)
+    puts str if @verbose
   end
 end
