@@ -9,12 +9,21 @@ inputs:
     enabled: true
     author: Shell
     shell: echo 'Hello, world!'
+    trigger:
+      schedule: '*/5 9-16 * * *'
+      now: true
+  - class: RocketChat
+    enabled: false
+    channel: '#xify-in'
+    uri: https://open.rocket.chat
+    user: 'rc_user'
+    pass: 'Pa55w0rd'
 outputs:
   - class: Stdout
     enabled: true
   - class: RocketChat
     enabled: false
-    channel: '#general'
+    channel: '#xify-out'
     uri: https://open.rocket.chat
     user: 'rc_user'
     pass: 'Pa55w0rd'
