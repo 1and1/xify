@@ -1,14 +1,9 @@
+require 'active_support'
+require 'active_support/core_ext/string/inflections'
 require 'rufus-scheduler'
 require 'yaml'
 
-require 'xify/input/pipe'
-require 'xify/input/prompt'
-require 'xify/input/rocket_chat'
-require 'xify/input/shell'
-require 'xify/output/stdout'
-require 'xify/output/rocket_chat'
-
-class Xify
+module Xify
   @verbose = false
 
   def self.run
@@ -38,7 +33,8 @@ class Xify
       config[section].map! do |handler|
         next unless handler['enabled']
         debug "Setting up #{handler['class']} as #{type}"
-        Object.const_get("#{type.capitalize}::#{handler['class']}").new handler
+        require "xify/#{type}/#{handler['class'].underscore}"
+        Object.const_get("Xify::#{type.capitalize}::#{handler['class']}").new handler
       end.compact!
     end
 
@@ -60,7 +56,7 @@ class Xify
       end
 
       Rufus::Scheduler.singleton.join
-    rescue Interrupt => e
+    rescue Interrupt
       $stderr.puts "\nExiting."
     end
   end
