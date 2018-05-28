@@ -16,7 +16,7 @@ module Input
           end
 
           if input.length != 1
-            yield Event.new @author, input.chomp
+            yield Xify::Event.new @author, input.chomp
           end
         rescue Interrupt
           raise

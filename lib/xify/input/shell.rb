@@ -6,7 +6,7 @@ module Input
 
     def run
       out = `#{@config['shell']}`.chomp
-      yield Event.new @config['author'], out, parent: @config['shell'] if out && out.length != 0
+      yield Xify::Event.new @config['author'], out, parent: @config['shell'] if out && out.length != 0
     end
 
     def updates(&block)

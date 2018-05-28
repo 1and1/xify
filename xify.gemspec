@@ -2,7 +2,7 @@ require 'date'
 
 Gem::Specification.new do |s|
   s.name        = 'xify'
-  s.version     = '0.4.0'
+  s.version     = '0.4.1'
   s.date        = Date.today.to_s
   s.summary     = 'Cross-post content from one service to another.'
   s.description = 'Cross-post content from one service to another.'
