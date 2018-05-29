@@ -1,5 +1,3 @@
-require 'xify/event'
-
 module Input
   class Prompt
     def initialize(config)

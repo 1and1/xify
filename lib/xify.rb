@@ -3,8 +3,11 @@ require 'active_support/core_ext/string/inflections'
 require 'rufus-scheduler'
 require 'yaml'
 
+require 'xify/event'
+
 module Xify
   @verbose = false
+  $stderr.sync = $stdout.sync = true
 
   def self.run
     working_dir = "#{ENV['HOME']}/.xify"
