@@ -12,6 +12,12 @@ inputs:
     trigger:
       schedule: '*/5 9-16 * * *'
       now: true
+  - class: Rss
+    enabled: false
+    uri: https://www.archlinux.org/feeds/news/
+    trigger:
+      schedule: '*/10 * * * *'
+      now: false
   - class: RocketChat
     enabled: false
     channel: '#xify-in'
