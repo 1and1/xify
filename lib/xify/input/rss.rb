@@ -11,17 +11,21 @@ module Input
       working_dir = "#{ENV['HOME']}/.xify/Rss"
       Dir.mkdir working_dir rescue Errno::EEXIST
       @latest_file = "#{working_dir}/#{@uri.to_s.gsub(/\W+/, '_')}"
+
+      @latest_time = Time.now
     end
 
     def updates
       opts = {}
       opts[:first] = :now if @config['trigger']['now']
-      Rufus::Scheduler.singleton.repeat @config['trigger']['schedule'], opts do
+      Rufus::Scheduler.singleton.repeat @config['trigger']['schedule'], opts do |job|
+        job_interval = job.last_time - @latest_time
+        @latest_time = job.last_time
         open(@uri) do |rss|
-          latest = Time.parse File.read(@latest_file) rescue Time.now - 24*60*60
+          latest = Time.parse File.read(@latest_file) rescue Time.now - job_interval
           feed = RSS::Parser.parse(rss)
           feed.items
-            .select do |item| 
+            .select do |item|
               item.pubDate > latest
             end
             .sort_by do |item|
